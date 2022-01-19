@@ -23,12 +23,12 @@ namespace SalesWebMVC.Services
             List<Seller> result = null;
 
             try
-            {               
+            {
                 result = await _context.Seller.ToListAsync();
             }
             catch
             {
-                
+
             }
 
             return result;
@@ -40,16 +40,24 @@ namespace SalesWebMVC.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Seller> FindByIdAsync (int id)
+        public async Task<Seller> FindByIdAsync(int id)
         {
             return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
         public async Task RemoveAsync(int id)
         {
-            var obj = await _context.Seller.FindAsync(id);
-            _context.Seller.Remove(obj);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var obj = await _context.Seller.FindAsync(id);
+                _context.Seller.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new IntegrityException(e.Message);
+            }
+
         }
 
 
