@@ -20,19 +20,9 @@ namespace SalesWebMVC.Services
 
         public async Task<List<Seller>> FindAllAsync()
         {
-            List<Seller> result = null;
-
-            try
-            {
-                result = await _context.Seller.ToListAsync();
-            }
-            catch
-            {
-
-            }
-
-            return result;
+            return await _context.Seller.ToListAsync();
         }
+
 
         public async Task InsertAsync(Seller obj)
         {
